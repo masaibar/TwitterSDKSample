@@ -10,7 +10,6 @@ import com.twitter.sdk.android.core.TwitterApiClient;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterConfig;
 import com.twitter.sdk.android.core.TwitterCore;
-import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.Tweet;
 
 public class TwitterWrapper {
@@ -39,11 +38,15 @@ public class TwitterWrapper {
                 .enqueue(callback);
     }
 
-    public TwitterSession getSession() {
-        return TwitterCore.getInstance().getSessionManager().getActiveSession();
+    public void logout() {
+        TwitterCore.getInstance().getSessionManager().clearActiveSession();
+    }
+
+    public boolean isLoggedIn() {
+        return TwitterCore.getInstance().getSessionManager().getActiveSession() != null;
     }
 
     public TwitterApiClient getApiClient() {
-        return TwitterCore.getInstance().getApiClient(getSession());
+        return TwitterCore.getInstance().getApiClient();
     }
 }

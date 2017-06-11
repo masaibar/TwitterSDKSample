@@ -1,10 +1,13 @@
 package com.masaibar.twittersdksample;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -12,6 +15,8 @@ import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import com.twitter.sdk.android.core.models.Tweet;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private void setupViews() {
         setupLoginButton();
         setupTweetButton();
+        setLogoutButton();
+        setCheckStatusButton();
     }
 
     private void setupLoginButton() {
@@ -54,7 +61,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 TwitterWrapper twitterWrapper = new TwitterWrapper(getApplicationContext());
-                twitterWrapper.tweet("test tweet", new Callback<Tweet>() {
+
+                String text = String.format(
+                        "test tweet (%s)",
+                        DateFormat.format("yyyy/MM/dd kk:mm:ss", Calendar.getInstance()).toString()
+                );
+                twitterWrapper.tweet(text, new Callback<Tweet>() {
                     @Override
                     public void success(Result<Tweet> result) {
                         Log.d("!!!", "Tweet succeeded");
@@ -69,6 +81,28 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void setLogoutButton() {
+        findViewById(R.id.button_logout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new TwitterWrapper(getApplicationContext()).logout();
+            }
+        });
+    }
+
+    private void setCheckStatusButton() {
+        final Context context = getApplicationContext();
+        findViewById(R.id.button_check_status).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(
+                        context,
+                        new TwitterWrapper(context).isLoggedIn() ? "logged in" : "logged out",
+                        Toast.LENGTH_SHORT
+                ).show();
+            }
+        });
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
