@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">TwitterSDKSample</string>
+    <string name="twitter_consumer_key">iUZrqtdnri4K04c4C2mhCsRS6</string>
+    <string name="twitter_consumer_secret">wvaKCJvwnxQZ4uYmfdmCJ6nK2HO2hhT6CI07LziEZvZGbbYU4V</string>
 </resources>
